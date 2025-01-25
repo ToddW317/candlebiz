@@ -49,7 +49,7 @@ const PopularProducts = () => {
       <div className="container mx-auto max-w-6xl">
         <div className="text-center mb-16">
           <p className="text-gray-600 uppercase tracking-wide mb-4">DRIED FLOWER COLLECTION</p>
-          <h2 className="text-4xl font-serif">See What's Popular</h2>
+          <h2 className="text-4xl font-serif">See What&apos;s Popular</h2>
         </div>
 
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-8 pt-20">

@@ -10,13 +10,13 @@ const GiftIdeas = () => {
             <p className="text-gray-600 uppercase tracking-wide mb-4">REMEMBER YOUR LOVED ONES</p>
             <h2 className="text-4xl font-serif mb-6">Gift Ideas That Last Longer</h2>
             <p className="text-gray-600 mb-8 leading-relaxed">
-              Who doesn't love flowers? Whether you're giving or receiving flowers, the only downside is how short-lived the happiness with a fresh bouquet of cut bouquets. We are passionate about creating bouquets that not only look beautiful, but last longer. Our premium dried flower bouquets can last up to years. Ask our staff for more information for your perfect bouquet.
+              Who doesn&apos;t love flowers? Whether you&apos;re giving or receiving flowers, the only downside is how short-lived the happiness with a fresh bouquet of cut bouquets. We are passionate about creating bouquets that not only look beautiful, but last longer. Our premium dried flower bouquets can last up to years. Ask our staff for more information for your perfect bouquet.
             </p>
             <Link
               href="/shop"
               className="inline-block bg-[#E8D5C4] text-gray-800 px-8 py-3 rounded-full hover:bg-[#E8D5C4]/90 transition-colors"
             >
-              LET'S GO
+              LET&apos;S GO
             </Link>
           </div>
         </div>

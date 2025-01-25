@@ -59,4 +59,6 @@ const useStore = create<StoreState>((set) => ({
     })),
 
   clearCart: () => set({ cart: [] }),
-})); 
+}));
+
+export default useStore; 

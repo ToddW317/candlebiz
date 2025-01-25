@@ -1,12 +1,14 @@
 'use client';
 
 import { useState } from 'react';
+import Image from 'next/image';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCloudUpload, faSpinner } from '@fortawesome/free-solid-svg-icons';
+import { Product, ProductFormData, FormSubmitEvent } from '@/types';
 
 interface ProductFormProps {
-  onSubmit: (data: any) => void;
-  initialData?: any;
+  onSubmit: (data: ProductFormData) => void;
+  initialData?: Partial<Product>;
   isLoading?: boolean;
 }
 
@@ -24,11 +26,24 @@ export default function ProductForm({ onSubmit, initialData, isLoading = false }
     }
   };
 
+  const handleSubmit = (e: FormSubmitEvent) => {
+    e.preventDefault();
+    const elements = e.target.elements;
+
+    const formData: ProductFormData = {
+      name: elements.name.value,
+      category: elements.category.value,
+      price: parseFloat(elements.price.value),
+      stock: parseInt(elements.stock.value, 10),
+      description: elements.description.value,
+      image: elements['file-upload'].files?.[0],
+    };
+
+    onSubmit(formData);
+  };
+
   return (
-    <form onSubmit={(e) => {
-      e.preventDefault();
-      // Handle form submission
-    }}>
+    <form onSubmit={handleSubmit}>
       {/* Image Upload */}
       <div className="mb-6">
         <label className="block text-sm font-medium text-skin-secondary mb-2">
@@ -38,11 +53,14 @@ export default function ProductForm({ onSubmit, initialData, isLoading = false }
           <div className="space-y-2 text-center">
             {imagePreview ? (
               <div className="relative">
-                <img
-                  src={imagePreview}
-                  alt="Preview"
-                  className="mx-auto h-32 w-32 object-cover rounded-lg"
-                />
+                <div className="mx-auto h-32 w-32 relative">
+                  <Image
+                    src={imagePreview}
+                    alt="Preview"
+                    fill
+                    className="object-cover rounded-lg"
+                  />
+                </div>
                 <button
                   type="button"
                   onClick={() => setImagePreview(null)}

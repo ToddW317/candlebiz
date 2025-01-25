@@ -7,6 +7,7 @@ import { auth } from '@/lib/firebase';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faLock } from '@fortawesome/free-solid-svg-icons';
 import Cookies from 'js-cookie';
+import { FirebaseError } from '@/types';
 
 export default function AdminLogin() {
   const [email, setEmail] = useState('');
@@ -37,14 +38,33 @@ export default function AdminLogin() {
 
     try {
       console.log('Attempting Firebase authentication...');
-      const userCredential = await signInWithEmailAndPassword(auth, email, password);
-      console.log('Authentication successful:', userCredential.user.email);
+      await signInWithEmailAndPassword(auth, email, password);
+      console.log('Authentication successful');
       
       // The useEffect above will handle the redirect once the auth state changes
       
-    } catch (err: any) {
-      console.error('Login error details:', err);
-      setError(err.message || 'Invalid credentials. Please try again.');
+    } catch (err) {
+      const firebaseError = err as FirebaseError;
+      console.error('Login error:', firebaseError.message);
+      
+      // Provide user-friendly error messages
+      switch (firebaseError.code) {
+        case 'auth/invalid-email':
+          setError('Invalid email address format.');
+          break;
+        case 'auth/user-not-found':
+          setError('No account found with this email.');
+          break;
+        case 'auth/wrong-password':
+          setError('Incorrect password.');
+          break;
+        case 'auth/too-many-requests':
+          setError('Too many failed attempts. Please try again later.');
+          break;
+        default:
+          setError('Failed to sign in. Please try again.');
+      }
+      
       // Remove any existing token if login fails
       Cookies.remove('auth-token');
     } finally {

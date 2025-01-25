@@ -13,9 +13,10 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 import Modal from '@/components/shared/Modal';
 import ProductForm from '@/components/products/ProductForm';
+import { Product, ProductFormData } from '@/types';
 
 // Temporary mock data
-const products = [
+const products: Product[] = [
   {
     id: '1',
     name: 'Lavender Dreams Candle',
@@ -47,11 +48,11 @@ export default function ProductsPage() {
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('all');
   const [showProductModal, setShowProductModal] = useState(false);
-  const [editingProduct, setEditingProduct] = useState<any>(null);
+  const [editingProduct, setEditingProduct] = useState<Partial<Product> | undefined>(undefined);
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 10;
 
-  const getStatusColor = (status: string) => {
+  const getStatusColor = (status: Product['status']) => {
     switch (status.toLowerCase()) {
       case 'in stock':
         return 'text-success bg-success/10';
@@ -65,16 +66,16 @@ export default function ProductsPage() {
   };
 
   const handleAddProduct = () => {
-    setEditingProduct(null);
+    setEditingProduct(undefined);
     setShowProductModal(true);
   };
 
-  const handleEditProduct = (product: any) => {
+  const handleEditProduct = (product: Product) => {
     setEditingProduct(product);
     setShowProductModal(true);
   };
 
-  const handleProductSubmit = async (data: any) => {
+  const handleProductSubmit = async (data: ProductFormData) => {
     // Handle product submission
     console.log('Product data:', data);
     setShowProductModal(false);

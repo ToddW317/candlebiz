@@ -3,19 +3,98 @@
 @tailwind utilities;
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  /* Base Colors */
+  --color-beige-50: #FAF7F5;
+  --color-beige-100: #F5EBE6;
+  --color-beige-200: #E8D5C4;
+  --color-beige-300: #DDBEA9;
+  --color-beige-400: #CB997E;
+  --color-beige-500: #A5785B;
+  --color-beige-600: #855E49;
+  --color-beige-700: #654636;
+  --color-beige-800: #442F24;
+  --color-beige-900: #221712;
+
+  /* Semantic Colors */
+  --color-primary: var(--color-beige-400);
+  --color-primary-light: var(--color-beige-200);
+  --color-primary-dark: var(--color-beige-600);
+
+  /* Background Colors */
+  --bg-primary: var(--color-beige-50);
+  --bg-secondary: var(--color-beige-100);
+  --bg-accent: var(--color-beige-200);
+  --bg-dark: var(--color-beige-900);
+
+  /* Text Colors */
+  --text-primary: var(--color-beige-900);
+  --text-secondary: var(--color-beige-700);
+  --text-muted: var(--color-beige-600);
+  --text-light: var(--color-beige-50);
+
+  /* Border Colors */
+  --border-primary: var(--color-beige-200);
+  --border-secondary: var(--color-beige-300);
+
+  /* Interactive Colors */
+  --interactive-primary: var(--color-beige-600);
+  --interactive-hover: var(--color-beige-700);
+  --interactive-active: var(--color-beige-800);
+
+  /* Status Colors */
+  --color-success: #2F855A;
+  --color-warning: #C05621;
+  --color-error: #9B2C2C;
+  --color-info: #2B6CB0;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+/* Base styles for better readability */
+@layer base {
+  body {
+    @apply bg-skin-primary text-skin-primary;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    @apply text-skin-primary font-cormorant;
+  }
+
+  p, span, div {
+    @apply text-skin-primary;
   }
 }
 
-body {
-  color: var(--foreground);
-  background: var(--background);
-  font-family: Arial, Helvetica, sans-serif;
+/* Custom utility classes */
+@layer utilities {
+  .text-skin-primary {
+    color: var(--text-primary);
+  }
+  .text-skin-secondary {
+    color: var(--text-secondary);
+  }
+  .text-skin-muted {
+    color: var(--text-muted);
+  }
+  .text-skin-light {
+    color: var(--text-light);
+  }
+
+  .bg-skin-primary {
+    background-color: var(--bg-primary);
+  }
+  .bg-skin-secondary {
+    background-color: var(--bg-secondary);
+  }
+  .bg-skin-accent {
+    background-color: var(--bg-accent);
+  }
+  .bg-skin-dark {
+    background-color: var(--bg-dark);
+  }
+
+  .border-skin-primary {
+    border-color: var(--border-primary);
+  }
+  .border-skin-secondary {
+    border-color: var(--border-secondary);
+  }
 }

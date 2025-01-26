@@ -53,8 +53,6 @@ export default function ProductForm({
   const [errors, setErrors] = useState<FormErrors>({});
   const [showNewCategory, setShowNewCategory] = useState(false);
   const [newCategory, setNewCategory] = useState({ name: '', description: '' });
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  // const [uploadProgress, setUploadProgress] = useState<number>(0);
   const [isUploading, setIsUploading] = useState(false);
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
 

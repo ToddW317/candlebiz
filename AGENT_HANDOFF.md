@@ -90,4 +90,87 @@
 3. Implement product management system
 4. Develop shopping cart functionality
 
-The foundation is set with a clean, responsive UI. The next phase should focus on making it functional with proper data management and e-commerce features. 
+The foundation is set with a clean, responsive UI. The next phase should focus on making it functional with proper data management and e-commerce features.
+
+# Agent Handoff Document
+
+## Project Overview
+A Next.js-based admin panel for a candle business, featuring product and category management with Firebase integration.
+
+## Current State
+
+### Implemented Features
+1. **Product Management**
+   - CRUD operations for products
+   - Image upload to Firebase Storage
+   - Product filtering and search
+   - Pagination
+   - Status tracking (In Stock, Low Stock, Out of Stock)
+
+2. **Category Management**
+   - Add new categories
+   - Category filtering
+   - Integration with product creation/editing
+
+3. **Firebase Integration**
+   - Firestore for product data
+   - Storage for product images
+   - Security rules implemented for both services
+
+4. **UI Components**
+   - Responsive Modal component
+   - ProductForm component with validation
+   - Image upload with preview
+   - Loading states and error handling
+
+### Technical Details
+1. **Firebase Configuration**
+   - Storage rules: Allow authenticated users to upload images (max 5MB)
+   - Firestore rules: Secure product and category collections
+   - Image domains configured in Next.js for Firebase Storage
+
+2. **Type Safety**
+   - TypeScript interfaces for Product, Category, and Form data
+   - ESLint configured with necessary overrides
+
+## Known Issues/Limitations
+1. Some ESLint warnings for unused variables (currently suppressed)
+2. Upload progress tracking implemented but not currently used
+3. Categories are currently client-side only, need to be moved to Firestore
+
+## Next Steps
+
+### High Priority
+1. Implement Firestore integration for categories
+2. Add error toast notifications for better user feedback
+3. Implement proper error boundaries
+
+### Medium Priority
+1. Add image compression before upload
+2. Implement batch operations for products
+3. Add loading states for image uploads
+4. Implement proper category count tracking
+
+### Low Priority
+1. Add image optimization settings
+2. Implement drag-and-drop for image uploads
+3. Add bulk product import/export
+4. Implement advanced filtering options
+
+## Environment Setup
+1. Firebase project with Firestore and Storage enabled
+2. Required environment variables:
+   ```
+   NEXT_PUBLIC_FIREBASE_API_KEY=
+   NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN=
+   NEXT_PUBLIC_FIREBASE_PROJECT_ID=
+   NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET=
+   NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID=
+   NEXT_PUBLIC_FIREBASE_APP_ID=
+   ```
+
+## Additional Notes
+- Mobile responsiveness is a key requirement
+- All forms include validation
+- Image upload is restricted to JPEG, PNG, and GIF formats
+- Product status is automatically determined based on stock levels 

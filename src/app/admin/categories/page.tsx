@@ -1,7 +1,6 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import Image from 'next/image';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { 
   faPlus, 
@@ -10,7 +9,7 @@ import {
   faSpinner,
   faChevronDown,
   faChevronUp,
-  faArrowRight
+  faArrowRight,
 } from '@fortawesome/free-solid-svg-icons';
 import Modal from '@/components/shared/Modal';
 import { Category, Product } from '@/types';
@@ -26,6 +25,7 @@ import {
   orderBy,
   Timestamp,
 } from 'firebase/firestore';
+import Image from 'next/image';
 
 interface CategoryFormData {
   name: string;
@@ -355,10 +355,13 @@ export default function CategoriesPage() {
                 {category.products.length > 0 ? (
                   <div className="divide-y divide-skin-primary">
                     {category.products.map((product) => (
-                      <div key={product.id} className="p-4 flex items-center justify-between hover:bg-skin-primary/5">
+                      <div 
+                        key={product.id}
+                        className="p-4 flex items-center justify-between bg-white hover:bg-skin-primary/5"
+                      >
                         <div className="flex items-center space-x-4">
                           {product.imageUrl ? (
-                            <div className="h-10 w-10 relative rounded overflow-hidden">
+                            <div className="h-10 w-10 relative rounded overflow-hidden flex-shrink-0">
                               <Image
                                 src={product.imageUrl}
                                 alt={product.name}
@@ -367,20 +370,68 @@ export default function CategoriesPage() {
                               />
                             </div>
                           ) : (
-                            <div className="h-10 w-10 rounded bg-skin-primary" />
+                            <div className="h-10 w-10 rounded bg-skin-primary flex-shrink-0" />
                           )}
                           <div>
                             <h4 className="text-sm font-medium text-skin-primary">{product.name}</h4>
                             <p className="text-xs text-skin-secondary">${product.price.toFixed(2)}</p>
                           </div>
                         </div>
-                        <button
-                          onClick={() => handleMoveProduct(product)}
-                          className="px-3 py-1 text-sm text-primary-dark hover:text-interactive-hover transition-colors flex items-center space-x-1"
-                        >
-                          <span>Move</span>
-                          <FontAwesomeIcon icon={faArrowRight} className="h-3 w-3" />
-                        </button>
+
+                        {/* Action Buttons */}
+                        <div className="flex items-center space-x-4">
+                          <button
+                            onClick={() => handleMoveProduct(product)}
+                            className="p-2 text-primary-dark hover:text-interactive-hover transition-colors"
+                            aria-label="Move product"
+                          >
+                            <FontAwesomeIcon icon={faArrowRight} className="h-4 w-4" />
+                          </button>
+                          <button
+                            onClick={() => {
+                              window.location.href = `/admin/products?edit=${product.id}`;
+                            }}
+                            className="p-2 text-primary-dark hover:text-interactive-hover transition-colors"
+                            aria-label="Edit product"
+                          >
+                            <FontAwesomeIcon icon={faPencil} className="h-4 w-4" />
+                          </button>
+                          <button
+                            onClick={async () => {
+                              if (!confirm('Are you sure you want to delete this product?')) return;
+                              
+                              try {
+                                // Delete the product
+                                await deleteDoc(doc(db, 'products', product.id));
+
+                                // Update category count
+                                const categoryRef = doc(db, 'categories', category.id);
+                                await updateDoc(categoryRef, {
+                                  productCount: Math.max(0, (category.productCount || 0) - 1),
+                                  updatedAt: Timestamp.now()
+                                });
+
+                                // Update local state
+                                setCategories(prev => prev.map(cat => 
+                                  cat.id === category.id
+                                    ? {
+                                        ...cat,
+                                        productCount: Math.max(0, (cat.productCount || 0) - 1),
+                                        products: cat.products.filter(p => p.id !== product.id)
+                                      }
+                                    : cat
+                                ));
+                              } catch (error) {
+                                console.error('Error deleting product:', error);
+                                alert('Failed to delete product. Please try again.');
+                              }
+                            }}
+                            className="p-2 text-error hover:text-error/80 transition-colors"
+                            aria-label="Delete product"
+                          >
+                            <FontAwesomeIcon icon={faTrash} className="h-4 w-4" />
+                          </button>
+                        </div>
                       </div>
                     ))}
                   </div>

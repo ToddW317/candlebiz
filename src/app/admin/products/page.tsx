@@ -15,6 +15,7 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 import Modal from '@/components/shared/Modal';
 import ProductForm from '@/components/products/ProductForm';
+import SwipeableProduct from '@/components/products/SwipeableProduct';
 import { Product, ProductFormData, Category } from '@/types';
 import { db } from '@/lib/firebase';
 import { 
@@ -343,87 +344,102 @@ export default function ProductsPage() {
             </div>
           </div>
 
-          {/* Products Table */}
+          {/* Products List */}
           <div className="bg-white rounded-lg shadow overflow-hidden">
-            <table className="min-w-full divide-y divide-skin-primary">
-              <thead className="bg-skin-primary">
-                <tr>
-                  <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-skin-secondary uppercase tracking-wider">
-                    Product
-                  </th>
-                  <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-skin-secondary uppercase tracking-wider">
-                    Category
-                  </th>
-                  <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-skin-secondary uppercase tracking-wider">
-                    Price
-                  </th>
-                  <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-skin-secondary uppercase tracking-wider">
-                    Stock
-                  </th>
-                  <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-skin-secondary uppercase tracking-wider">
-                    Status
-                  </th>
-                  <th scope="col" className="px-6 py-3 text-right text-xs font-medium text-skin-secondary uppercase tracking-wider">
-                    Actions
-                  </th>
-                </tr>
-              </thead>
-              <tbody className="bg-white divide-y divide-skin-primary">
-                {currentProducts.map((product) => (
-                  <tr key={product.id}>
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      <div className="flex items-center">
-                        {product.imageUrl ? (
-                          <div className="h-10 w-10 relative rounded overflow-hidden">
-                            <Image
-                              src={product.imageUrl}
-                              alt={product.name}
-                              fill
-                              className="object-cover"
-                            />
-                          </div>
-                        ) : (
-                          <div className="h-10 w-10 rounded bg-skin-primary" />
-                        )}
-                        <div className="ml-4">
-                          <div className="text-sm font-medium text-skin-primary">
-                            {product.name}
+            {/* Desktop View */}
+            <div className="hidden md:block">
+              <table className="min-w-full divide-y divide-skin-primary">
+                <thead className="bg-skin-primary">
+                  <tr>
+                    <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-skin-secondary uppercase tracking-wider">
+                      Product
+                    </th>
+                    <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-skin-secondary uppercase tracking-wider">
+                      Category
+                    </th>
+                    <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-skin-secondary uppercase tracking-wider">
+                      Price
+                    </th>
+                    <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-skin-secondary uppercase tracking-wider">
+                      Stock
+                    </th>
+                    <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-skin-secondary uppercase tracking-wider">
+                      Status
+                    </th>
+                    <th scope="col" className="px-6 py-3 text-right text-xs font-medium text-skin-secondary uppercase tracking-wider">
+                      Actions
+                    </th>
+                  </tr>
+                </thead>
+                <tbody className="bg-white divide-y divide-skin-primary">
+                  {currentProducts.map((product) => (
+                    <tr key={product.id}>
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        <div className="flex items-center">
+                          {product.imageUrl ? (
+                            <div className="h-10 w-10 relative rounded overflow-hidden flex-shrink-0">
+                              <Image
+                                src={product.imageUrl}
+                                alt={product.name}
+                                fill
+                                className="object-cover"
+                              />
+                            </div>
+                          ) : (
+                            <div className="h-10 w-10 rounded bg-skin-primary flex-shrink-0" />
+                          )}
+                          <div className="ml-4">
+                            <div className="text-sm font-medium text-skin-primary">
+                              {product.name}
+                            </div>
                           </div>
                         </div>
-                      </div>
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      <div className="text-sm text-skin-secondary">{product.category}</div>
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      <div className="text-sm text-skin-primary">${product.price.toFixed(2)}</div>
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      <div className="text-sm text-skin-primary">{product.stock}</div>
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      <span className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${getStatusColor(product.status)}`}>
-                        {product.status}
-                      </span>
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                      <button
-                        onClick={() => handleEditProduct(product)}
-                        className="text-primary-dark hover:text-interactive-hover mr-3"
-                      >
-                        <FontAwesomeIcon icon={faPencil} className="h-4 w-4" />
-                      </button>
-                      <button
-                        onClick={() => handleDeleteProduct(product.id)}
-                        className="text-error hover:text-error/80"
-                      >
-                        <FontAwesomeIcon icon={faTrash} className="h-4 w-4" />
-                      </button>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        <div className="text-sm text-skin-secondary">{product.category}</div>
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        <div className="text-sm text-skin-primary">${product.price.toFixed(2)}</div>
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        <div className="text-sm text-skin-primary">{product.stock}</div>
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        <span className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${getStatusColor(product.status)}`}>
+                          {product.status}
+                        </span>
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                        <button
+                          onClick={() => handleEditProduct(product)}
+                          className="text-primary-dark hover:text-interactive-hover mr-3"
+                        >
+                          <FontAwesomeIcon icon={faPencil} className="h-4 w-4" />
+                        </button>
+                        <button
+                          onClick={() => handleDeleteProduct(product.id)}
+                          className="text-error hover:text-error/80"
+                        >
+                          <FontAwesomeIcon icon={faTrash} className="h-4 w-4" />
+                        </button>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+
+            {/* Mobile View */}
+            <div className="md:hidden divide-y divide-skin-primary">
+              {currentProducts.map((product) => (
+                <SwipeableProduct
+                  key={product.id}
+                  product={product}
+                  onEdit={handleEditProduct}
+                  onDelete={() => handleDeleteProduct(product.id)}
+                />
+              ))}
+            </div>
           </div>
 
           {/* Pagination */}

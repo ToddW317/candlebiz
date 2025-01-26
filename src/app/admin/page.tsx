@@ -1,5 +1,7 @@
 'use client';
 
+import { useState } from 'react';
+import { useRouter } from 'next/navigation';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { 
   faBox, 
@@ -9,6 +11,9 @@ import {
   faArrowUp,
   faArrowDown
 } from '@fortawesome/free-solid-svg-icons';
+import Modal from '@/components/shared/Modal';
+import ProductForm from '@/components/products/ProductForm';
+import { Category, ProductFormData } from '@/types';
 
 const stats = [
   { 
@@ -41,7 +46,47 @@ const stats = [
   },
 ];
 
+// Initial categories (in production, this would come from your backend)
+const initialCategories: Category[] = [
+  {
+    id: '1',
+    name: 'Scented Candles',
+    description: 'Aromatic candles with various fragrances',
+    productCount: 2,
+  },
+  {
+    id: '2',
+    name: 'Gift Sets',
+    description: 'Curated collections of candles and accessories',
+    productCount: 1,
+  },
+];
+
 export default function AdminDashboard() {
+  const router = useRouter();
+  const [showProductModal, setShowProductModal] = useState(false);
+  const [categories, setCategories] = useState<Category[]>(initialCategories);
+
+  const handleAddProduct = () => {
+    setShowProductModal(true);
+  };
+
+  const handleProductSubmit = async (data: ProductFormData) => {
+    // In production, this would be handled by your backend
+    console.log('New product data:', data);
+    setShowProductModal(false);
+    router.push('/admin/products'); // Redirect to products page after creation
+  };
+
+  const handleAddCategory = (categoryData: { name: string; description: string }) => {
+    const newCategory: Category = {
+      id: Date.now().toString(),
+      ...categoryData,
+      productCount: 0,
+    };
+    setCategories(current => [...current, newCategory]);
+  };
+
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
@@ -49,7 +94,10 @@ export default function AdminDashboard() {
           Dashboard Overview
         </h1>
         <div className="flex space-x-3">
-          <button className="px-4 py-2 bg-primary-dark text-white rounded-lg hover:bg-interactive-hover transition-colors">
+          <button 
+            onClick={handleAddProduct}
+            className="px-4 py-2 bg-primary-dark text-white rounded-lg hover:bg-interactive-hover transition-colors"
+          >
             Add Product
           </button>
           <button className="px-4 py-2 bg-white border border-skin-primary text-skin-primary rounded-lg hover:bg-skin-primary transition-colors">
@@ -116,6 +164,20 @@ export default function AdminDashboard() {
           ))}
         </div>
       </div>
+
+      {/* Product Modal */}
+      <Modal
+        isOpen={showProductModal}
+        onClose={() => setShowProductModal(false)}
+        title="Add New Product"
+        size="lg"
+      >
+        <ProductForm
+          onSubmit={handleProductSubmit}
+          categories={categories}
+          onAddCategory={handleAddCategory}
+        />
+      </Modal>
     </div>
   );
 } 

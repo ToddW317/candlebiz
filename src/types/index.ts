@@ -5,8 +5,10 @@ export interface Product {
   price: number;
   stock: number;
   status: 'In Stock' | 'Low Stock' | 'Out of Stock';
-  description?: string;
-  imageUrl?: string;
+  description: string;
+  imageUrl: string | null;
+  createdAt?: string;
+  updatedAt?: string;
 }
 
 export interface Category {
@@ -29,9 +31,14 @@ export interface FormSubmitEvent extends React.FormEvent<HTMLFormElement> {
   };
 }
 
-export type ProductFormData = Omit<Product, 'id' | 'status'> & {
-  image?: File;
-};
+export interface ProductFormData {
+  name: string;
+  category: string;
+  price: number;
+  stock: number;
+  description: string;
+  imageUrl: string | null;
+}
 
 export interface FirebaseError extends Error {
   code: string;

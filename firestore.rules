@@ -1,0 +1,48 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Products collection
+    match /products/{productId} {
+      allow read: if true; // Anyone can read products
+      allow write: if request.auth != null; // Only authenticated users can write
+      
+      // Validate product data
+      allow create: if request.auth != null
+        && request.resource.data.name is string
+        && request.resource.data.name.size() >= 3
+        && request.resource.data.price is number
+        && request.resource.data.price > 0
+        && request.resource.data.stock is number
+        && request.resource.data.stock >= 0
+        && request.resource.data.description is string
+        && request.resource.data.description.size() >= 10
+        && request.resource.data.category is string
+        && request.resource.data.imageUrl is string;
+
+      allow update: if request.auth != null
+        && request.resource.data.name is string
+        && request.resource.data.name.size() >= 3
+        && request.resource.data.price is number
+        && request.resource.data.price > 0
+        && request.resource.data.stock is number
+        && request.resource.data.stock >= 0
+        && request.resource.data.description is string
+        && request.resource.data.description.size() >= 10
+        && request.resource.data.category is string
+        && request.resource.data.imageUrl is string;
+    }
+
+    // Categories collection
+    match /categories/{categoryId} {
+      allow read: if true;
+      allow write: if request.auth != null;
+      
+      // Validate category data
+      allow create, update: if request.auth != null
+        && request.resource.data.name is string
+        && request.resource.data.name.size() > 0
+        && request.resource.data.description is string;
+    }
+  }
+} 
